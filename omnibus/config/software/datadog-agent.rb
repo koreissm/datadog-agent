@@ -116,6 +116,14 @@ build do
     command "invoke -e process-agent.build --python-runtimes #{py_runtimes_arg} --major-version #{major_version_arg} --arch #{platform}", :env => env
 
     copy 'bin/process-agent/process-agent.exe', "#{Omnibus::Config.source_dir()}/datadog-agent/src/github.com/DataDog/datadog-agent/bin/agent"
+
+    unless windows_arch_i386?
+      if ENV['WINDOWS_DDFILTER_DRIVER'] and not ENV['WINDOWS_DDFILTER_DRIVER'].empty?
+        ## don't bother with system probe build on x86.
+        command "invoke -e system-probe.build --windows"
+        copy 'bin/system-probe/system-probe.exe', "#{Omnibus::Config.source_dir()}/datadog-agent/src/github.com/DataDog/datadog-agent/bin/agent"
+      end
+    end
   else
     command "invoke -e process-agent.build --python-runtimes #{py_runtimes_arg} --major-version #{major_version_arg}", :env => env
     copy 'bin/process-agent/process-agent', "#{install_dir}/embedded/bin"
