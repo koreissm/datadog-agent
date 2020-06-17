@@ -313,7 +313,7 @@ def deps(ctx, no_checks=False, core_dir=None, verbose=False, android=False, dep_
             core_dir = os.path.join(os.getcwd(), 'vendor', 'integrations-core')
             checks_base = os.path.join(core_dir, 'datadog_checks_base')
             if not os.path.isdir(core_dir):
-                ctx.run('git clone -{} https://github.com/DataDog/integrations-core {}'.format(verbosity, core_dir))
+                ctx.run('git clone --depth 1 -{} https://github.com/DataDog/integrations-core {}'.format(verbosity, core_dir))
             ctx.run('pip install -{} "{}[deps]"'.format(verbosity, checks_base))
     checks_done = datetime.datetime.now()
 
