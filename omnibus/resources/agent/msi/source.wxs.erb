@@ -535,7 +535,8 @@
       <?endif ?>
     </Feature>
     <?if $(var.IncludeSysprobe) = true ?>
-      <!-- don't install by default (indicated by level 0) -->
+      <!-- don't install by default (indicated by level 100)  Only things with level
+           <= INSTALLLEVEL (1 by default) will be installed.  Can be changed via gui or command line params to optionally install -->
       <Feature Id="WindowsNP" 
                Level="100"  
                Title="Network Performance Monitoring" 
@@ -544,6 +545,7 @@
                >
         <ComponentRef Id="DATADOGSYSPROBESERVICE" />
         <MergeRef Id="ddfilterinstall"/>
+        <ComponentRef Id="system_probe.yaml.example" />
       </Feature>
     <?endif ?>
     <!-- UI Stuff: 100% Omnibus Generated -->

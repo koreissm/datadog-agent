@@ -169,12 +169,9 @@ typedef struct _udpFlowData {
 } UDP_FLOW_DATA;
 typedef struct _tcpFlowData {
 
-<<<<<<< HEAD
-=======
     uint64_t        iRTT;           // initial RTT
     uint64_t        sRTT;           // smoothed RTT
     uint64_t        rttVariance;
->>>>>>> Still WIP
     uint64_t        retransmitCount;
 } TCP_FLOW_DATA;
 typedef struct _perFlowData {
