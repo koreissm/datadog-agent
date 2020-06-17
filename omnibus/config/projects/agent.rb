@@ -184,6 +184,9 @@ end
 if windows?
   dependency 'cacerts_py2' if with_python_runtime? "2"
   dependency 'cacerts_py3' if with_python_runtime? "3"
+  if ENV['WINDOWS_DDFILTER_DRIVER'] and not ENV['WINDOWS_DDFILTER_DRIVER'].empty?
+    dependency 'datadog-windows-filter-driver'
+  end
 else
   dependency 'cacerts'
 end

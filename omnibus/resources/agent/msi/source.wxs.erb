@@ -83,6 +83,12 @@
      <PropertyRef Id="WIX_ACCOUNT_LOCALSYSTEM" />
      <PropertyRef Id="WIX_ACCOUNT_USERS" />
 
+     <?if $(var.IncludeSysprobe) = true ?>
+     <Property Id="SYSPROBE_PRESENT" Value="true" />
+     <?else ?>
+     <Property Id="SYSPROBE_PRESENT" Value="false" />
+     <?endif ?>
+
     <!--
       The following four properties are set to see if the user specified the binary dir or config dir on
       the command line. These properties are loaded before the property is loaded from the registry (below)
@@ -370,6 +376,9 @@
             <!-- file declaration for sysprobe -->
             <!-- todo service declaration -->
             <?if $(var.IncludeSysprobe) = true ?>
+              <Directory Id="DRIVER" Name="driver">
+                <Merge Id="ddfilterinstall" SourceFile="$(var.BinFiles)\ddfilter.msm" DiskId="1" Language="1033" />
+              </Directory>
               <Component Id="DATADOGSYSPROBESERVICE" Guid="5D41ECDB-B91E-4802-878C-CDBA84721623">
                 <File Id="system_probe.exe"
                     Name="system-probe.exe"
@@ -413,7 +422,17 @@
             Name="datadog.yaml"
             Source="$(var.EtcFiles)\datadog.yaml.example"/>
       </Component>
-
+      <?if $(var.IncludeSysprobe) = true ?>
+        <Component Id="system_probe.yaml.example"
+                 Guid="a268622a-0305-4b5d-b08a-2371820f6b3f"
+                 NeverOverwrite="yes"
+                 Permanent="yes">
+          <File Id="system_probe.yaml.example"
+            Name="system-probe.yaml"
+            Source="$(var.EtcFiles)\system-probe.yaml.example"/>
+        </Component>
+      <?endif ?>
+      
 
       <Directory Id="checks.d" Name="checks.d">
         <Component Id="checks.d"
@@ -524,6 +543,7 @@
                Absent="allow"
                >
         <ComponentRef Id="DATADOGSYSPROBESERVICE" />
+        <MergeRef Id="ddfilterinstall"/>
       </Feature>
     <?endif ?>
     <!-- UI Stuff: 100% Omnibus Generated -->
@@ -641,8 +661,8 @@
     <WixVariable Id="WixUIDialogBmp" Value="Resources\assets\dialog_background.bmp" />
     <WixVariable Id="WixUIBannerBmp" Value="Resources\assets\banner_background.bmp" />
 
-    <CustomAction Id='SetFinalizeProperty' Return='check' Property='FinalizeInstall'
-        Value='PROJECTLOCATION=[PROJECTLOCATION];APPLICATIONDATADIRECTORY=[APPLICATIONDATADIRECTORY];DDAGENTUSER_NAME=[DDAGENTUSER_NAME];DDAGENTUSER_PASSWORD=[DDAGENTUSER_PASSWORD];' />
+    <CustomAction Id='SetFinalizeProperty' Return='check' Property='FinalizeInstall' 
+        Value='PROJECTLOCATION=[PROJECTLOCATION];APPLICATIONDATADIRECTORY=[APPLICATIONDATADIRECTORY];DDAGENTUSER_NAME=[DDAGENTUSER_NAME];DDAGENTUSER_PASSWORD=[DDAGENTUSER_PASSWORD];SYSPROBE_PRESENT=[SYSPROBE_PRESENT]' />
     <CustomAction Id='FinalizeInstall' BinaryKey='wixcadll' DllEntry='FinalizeInstall' Execute='deferred' Return='check' Impersonate='no'/>
     <CustomAction Id='StopDDServices' BinaryKey='wixcadll' DllEntry='PreStopServices' Execute='deferred' Return='check' Impersonate='no'/>
     <CustomAction Id='StartDDServices' BinaryKey='wixcadll' DllEntry='PostStartServices' Execute='deferred' Return='check' Impersonate='no'/>

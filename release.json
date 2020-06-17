@@ -5,7 +5,8 @@
         "OMNIBUS_RUBY_VERSION": "datadog-5.5.0",
         "JMXFETCH_VERSION": "0.36.2",
         "JMXFETCH_HASH": "f782b9a5e9dffbce3463245562858fd8fed1508269222e8bebeefd3f865d10d8",
-        "WINDOWS_DDFILTER_DRIVER": "1.2.3"
+        "WINDOWS_DDFILTER_DRIVER": "testsigned",
+        "WINDOWS_DDFILTER_VERSION": "7be11cee"
     },
     "nightly-a7": {
         "INTEGRATIONS_CORE_VERSION": "master",
