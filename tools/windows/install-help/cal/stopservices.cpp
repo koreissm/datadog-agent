@@ -757,10 +757,12 @@ int installServices(CustomActionData& data, const wchar_t *password) {
     };
     // by default, don't add sysprobe
     int servicesToInstall = NUM_SERVICES - 1;
-    std::wstring sysprobe_present;
-    if(data.value(L"SYSPROBE_PRESENT", sysprobe_present) && sysprobe_present.compare(L"true") == 0)
+    if(data.installSysprobe())
     {
+        WcaLog(LOGMSG_STANDARD, "Requested sysprobe, installing all services");
         servicesToInstall = NUM_SERVICES;
+    } else {
+        WcaLog(LOGMSG_STANDARD, "Not installing sysprobe, installing %d services", servicesToInstall);
     }
 #else
   #define NUM_SERVICES 1
@@ -807,9 +809,11 @@ int installServices(CustomActionData& data, const wchar_t *password) {
     if (0 != er) {
         WcaLog(LOGMSG_STANDARD, "Warning, unable to enable process service for dd user %d", er);
     }
-    er = EnableServiceForUser(data, systemProbeService);
-    if (0 != er) {
-        WcaLog(LOGMSG_STANDARD, "Warning, unable to enable system probe service for dd user %d", er);
+    if(data.installSysprobe()){
+        er = EnableServiceForUser(data, systemProbeService);
+        if (0 != er) {
+            WcaLog(LOGMSG_STANDARD, "Warning, unable to enable system probe service for dd user %d", er);
+        }
     }
     // need to enable user rights for the datadogagent service (main service)
     // so that it can restart itself
@@ -899,8 +903,7 @@ int verifyServices(CustomActionData& data)
     };
     // by default, don't add sysprobe
     int servicesToInstall = NUM_SERVICES - 1;
-    std::wstring sysprobe_present;
-    if(data.value(L"SYSPROBE_PRESENT", sysprobe_present) && sysprobe_present.compare(L"true") == 0)
+    if(data.installSysprobe())
     {
         servicesToInstall = NUM_SERVICES;
     }

@@ -8,9 +8,10 @@ default_version "master"
 if ohai["platform"] == "windows"
     driverpath = ENV['WINDOWS_DDFILTER_DRIVER']
     driverver = ENV['WINDOWS_DDFILTER_VERSION']
+    drivermsmsha = ENV['WINDOWS_DDFILTER_SHASUM']
 
     source :url => "https://s3.amazonaws.com/dd-windowsfilter/builds/#{driverpath}/ddfilterinstall-#{driverver}.msm",
-           :sha256 => "3f094feee9c8929c7b437a6dbd49d86d239cf4f207d80a82baf56b9b9173aefd",
+           :sha256 => "#{drivermsmsha}",
            :target_filename => "ddfilter.msm"
 
     build do
