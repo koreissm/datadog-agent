@@ -83,7 +83,7 @@ variables:
   RELEASE_VERSION_6: nightly
   RELEASE_VERSION_7: nightly-a7
   DATADOG_AGENT_BUILDIMAGES: v2424505-0439a40
-  DATADOG_AGENT_BUILDERS: v2448672-5304c3c
+  DATADOG_AGENT_BUILDERS: v2641706-5b56ba0
   DATADOG_AGENT_WINBUILDIMAGES: v2468030-cbaf3fe
   DATADOG_AGENT_WINBUILDERS: v2348149-ba6640d
   DATADOG_AGENT_ARMBUILDIMAGES: v2424505-0439a40
@@ -1286,8 +1286,7 @@ agent_android_apk:
   before_script:
     - echo running android before_script
     - cd $SRC_PATH
-    - pip install -U pip
-    - pip install -r requirements.txt
+    - python3 -m pip install -r requirements.txt
     - inv -e deps --android --dep-vendor-only --no-checks
     # Some Android license has changed, we have to accept the new version.
     # But on top of that, there is a bug in sdkmanager not updating correctly
@@ -3722,8 +3721,7 @@ trigger_release_6:
   dependencies: []
   before_script:
   - cd $SRC_PATH
-  - pip install --upgrade --ignore-installed pip setuptools
-  - pip install -r requirements.txt
+  - python3 -m pip install -r requirements.txt
   script:
   - inv -e e2e-tests --image=datadog/agent-dev:${CI_COMMIT_REF_SLUG}-py2
   - inv -e e2e-tests --image=datadog/agent-dev:${CI_COMMIT_REF_SLUG}-py3
