@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/DataDog/datadog-agent/pkg/process/config"
+	"github.com/DataDog/datadog-agent/pkg/process/util"
 
 	_ "net/http/pprof"
 )
