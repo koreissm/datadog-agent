@@ -77,6 +77,7 @@ bool CustomActionData::parseSysprobeData()
         WcaLog(LOGMSG_STANDARD, "SYSPROBE_PRESENT not present");
         return true;
     }
+    WcaLog(LOGMSG_STANDARD, "SYSPROBE_PRESENT is %S", sysprobePresent.c_str());
     if(sysprobePresent.compare(L"true") != 0) {
         // explicitly disabled
         WcaLog(LOGMSG_STANDARD, "SYSPROBE_PRESENT explicitly disabled %S", sysprobePresent.c_str());
@@ -90,7 +91,8 @@ bool CustomActionData::parseSysprobeData()
 
         return true;
     }
-    if(addlocal.compare(L"ALL")){
+    WcaLog(LOGMSG_STANDARD, "ADDLOCAL is (%S)", addlocal.c_str());
+    if(_wcsicmp(addlocal.c_str(), L"ALL")== 0){
         // installing all components, do it
         this->doInstallSysprobe = true;
         WcaLog(LOGMSG_STANDARD, "ADDLOCAL is ALL");
